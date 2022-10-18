@@ -1,0 +1,38 @@
+create database First;
+use First;
+
+create table teacher(id int , Tname varchar(10), Course varchar(10)) ;
+select * from teacher;
+insert into teacher(id,Tname,Course) values(6,"Shivani","Blah");
+rollback;
+commit;
+
+create table course(courseName varchar(10), Tid int references teacher(id));
+insert into course(courseName,Tid) values("C.E2",2);
+select * from course;
+
+select * from teacher join course on teacher.id=course.Tid;
+
+select * from teacher left join course on teacher.id=course.Tid;
+
+select * from teacher right join course on teacher.id=course.Tid;
+
+select * from teacher cross join course;
+
+select * from course group by Tid;
+select * from course group by Tid having count(Tid)>1;
+
+select distinct courseName from course where Tid=(select id from teacher where Tname='Abhishek');
+select distinct courseName from course where courseName='IS'and  Tid=(select id from teacher where Tname='Abhishek');
+select courseName from course join teacher where teacher.Tname='Abhishek' and course.courseName='IS';
+
+select ucase(courseName) from course;
+select Lcase(courseName) from course;
+
+select curdate();
+select current_date();
+select current_time();
+select current_user();
+SELECT DATE_ADD('2018-05-01',INTERVAL 1 DAY);
+SELECT DATE_SUB('2018-05-01',INTERVAL 1 YEAR);
+
