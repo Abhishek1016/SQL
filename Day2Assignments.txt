@@ -1,0 +1,58 @@
+create database secondday;
+use secondday;
+create table Teacher(No int, Name varchar(10),Age int ,Department varchar(10),DOJ date,Salary int ,Sex char);
+
+insert into Teacher(No,Name,Age,Department,DOJ,Salary,Sex) values(8,"Shalakha",33,"Maths",'1997-07-31',20000,"F");
+
+select * from Teacher;
+
+select * from Teacher where Department="History";
+select * from Teacher where Department="Maths" and Sex="F";
+select Name ,DOJ from Teacher order by DOJ ASC; 
+select Name,Salary,Age from Teacher where Sex="M";
+select Name,Salary,Age, ((Salary+(Salary*15))/100) as Bonus from Teacher ;
+select Name,DOJ from Teacher where DOJ like '1997%';
+select * from Teacher limit 3;
+
+select count(distinct Department ) from Teacher;
+select max(Age) from Teacher where Sex="F";
+select avg(Salary) from Teacher where Sex="M";
+select sum(Salary) from Teacher where DOJ<'1997-01-01';
+
+create table Salesman(Salesman_id int ,Name varchar(10),City varchar(10),Commision float);
+insert into Salesman(Salesman_id,Name,City,Commision) values(5007,"Rakesh","Rome",0.13);
+commit;
+select * from Salesman;
+
+create table Orders(Order_No int, Purchase_Amount float,Oredr_Date date,Customer_id int ,Salesman_id int references Salesman(Salesman_id));
+insert into Orders(Order_No,Purchase_Amount,Oredr_Date,Customer_id,Salesman_id) values (70013,3045.6,'2012-04-25',3002,5001);
+rollback;
+commit;
+select * from Orders;
+select * from Orders where Salesman_id=(select Salesman_id from Salesman where Name="David");
+select * from Orders where Salesman_id=(select Salesman_id from Salesman where City="London");
+select * from Orders where Customer_id=3004;
+select * from Orders where   Purchase_Amount>(select avg(Purchase_Amount) from Orders where Oredr_Date='2012-10-10'); 
+select * from Orders left join Salesman on Orders.Salesman_id=Salesman.Salesman_id where Salesman.City="Paris";
+select Commision from Salesman left join Orders on Salesman.Salesman_id=Orders.Salesman_id where Orders.Salesman_id=5001;
+select * from Orders where   Purchase_Amount<(select avg(Purchase_Amount) from Orders where Oredr_Date='2012-09-10'); 
+select all Name from Salesman ;
+commit;
+
+
+create table Books(Book_id varchar(10),Book_Name varchar(15),Author_Name varchar(15),Publishers varchar(10),Price int ,Type varchar(10),Qty int);
+select *from Books;
+insert into Books(Book_id,Book_Name,Author_Name,Publishers,Price,Type,Qty) values("F0002","Thunderbolts","Anna Roberts","First Publ",750,"Fiction",50);
+commit;
+
+create table Issued(Bood_id varchar(10) references Books(Books_id),Quantity_Issued int);
+insert into Issued(Bood_id,Quantity_Issued) values("F0001",2);
+
+select Book_Name,Author_Name,Price  from Books where exists(select Bood_id from Issued where Issued.Bood_id=Books.Book_id ) ;
+select Book_Name from Books where exists(select Bood_id from Issued where Issued.Bood_id=Books.Book_id and Type="text");
+select Book_Name, Price from Books order by Price asc;
+select Price+50 as Price from Books where Publishers="EPB";
+
+select count(*) from Books;
+select max(Price) from Books where Qty>=15;
+select Book_Name,Author_Name from Books where Publishers="EPB";
