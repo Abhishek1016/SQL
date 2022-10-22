@@ -1,0 +1,52 @@
+create database fourthday;
+use fourthday;
+
+create table laptop(Lid int, Lname varchar(10),version int);
+insert into laptop(Lid,Lname,version) values (3,"hp",2);
+select * from laptop;
+
+create table updateinfo(updatedversion int);
+select * from updateinfo;
+                                                 
+Delimiter $
+create trigger triggerr
+after update on laptop for each row    
+begin 
+insert into updateinfo(updatedversion) values (new.version);
+end$
+Delimiter ;
+
+update laptop set version=3;
+
+start transaction;
+update laptop set version=5;
+commit;
+insert into laptop(Lid,Lname,version) values (5,"lenovo2",3);
+rollback;
+select * from laptop;
+
+
+start transaction;
+update laptop set version=6;
+savepoint saved;
+insert into laptop(Lid,Lname,version) values (6,"lenovo2",3);
+rollback to saved;
+commit;
+select * from laptop;
+
+create table Account(id int,Cname varchar(10),balance int);
+
+insert into Account(id,Cname,balance) values (1,"Abhishek",1000),(2,"Sarvesh",2000);
+
+start transaction;
+update Account set balance=balance-500 where id=1;
+update Account set balance=balance-1000 where id=2;
+savepoint lasttransaction;
+update Account set balance=balance-500 where id=1;
+rollback to lasttransaction;
+commit;
+select * from Account;
+
+
+
+
