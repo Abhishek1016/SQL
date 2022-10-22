@@ -1,0 +1,104 @@
+create database thirddayasgmt;
+use thirddayasgmt;
+
+create table employee(empno int ,ename varchar(10), job varchar(10), manager int,hiredate date,salary float,commission float,dept_no int);
+
+insert into employee(empno,ename,job,manager,hiredate,salary,commission,dept_no) values(8902,"Fakir","Analyst",8566,'1991-12-03',3500.00,null,20);
+select * from employee;
+Delimiter $
+create function displayallemp()
+returns type(
+ empno int ,ename varchar(10), job varchar(10), manager int,hiredate date,salary float,commission float,dept_no int)
+ as
+ begin$
+ 
+ 
+ create function displayallemp()
+ returns table
+ as
+ return  select *from employee;
+ 
+ 
+ Delimiter %
+ create function additem( empno int ,ename varchar(10), job varchar(10), manager int,hiredate date,salary float,commission float,dept_no int)
+ returns int
+ deterministic
+ begin
+ insert into employee values(empno,ename,job,manager,hiredate,salary,commission,dept_no) 
+ ;return 0;
+ end%
+ Delimiter ;
+ 
+ select additem(8088,"Ramesh","clerk",8789,'2022-08-09',4500.00,null,10);
+ 
+ Delimiter $
+ create function numofrec()
+ returns int
+ deterministic
+ begin
+ declare rec int;
+ select count(*) from employee into rec;
+ return rec;
+ end$
+ Delimiter ;
+ 
+ 
+ Delimiter @ 
+create function displayall(empno int ,ename varchar(10), job varchar(10), manager int,hiredate date,salary float,commission float,dept_no int)
+returns table( empno int ,ename varchar(10), job varchar(10), manager int,hiredate date,salary float,commission float,dept_no int)
+as out
+declare query1 varchar;
+begin
+query1=select empno,ename,job,manager,hiredate,salary,commission,dept_no from employee;
+end@
+Delimiter ;
+
+create view viewtable as select * from employee;
+
+ Delimiter @ 
+create function displayall()
+returns int
+begin
+select * from viewtable;
+return 1;
+end@
+Delimiter ;
+
+Delimiter @ 
+create function displayall()
+returns table
+as 
+return()
+declare query1 varchar;
+begin
+query1=select * from employee;
+end@
+Delimiter ;
+
+Delimiter &
+create function updateee()
+returns int 
+deterministic 
+begin
+declare var varchar;
+end&
+
+
+create TABLE PRODUCTS(PRODUCT_CODE VARCHAR(3),PRODUCT_NAME VARCHAR(20),PRICE INT,QTY_LEFT INT,QTY_SOLD INT);
+
+
+INSERT INTO PRODUCTS(PRODUCT_CODE,PRODUCT_NAME,PRICE,QTY_LEFT,QTY_SOLD) VALUES('P1','iPhone 13 Pro Max', 1200,5,195),('P2','AirPods Pro', 279,10,90),('P3','MacBook Pro 16', 5000,2,48),('P4','iPad Air', 650,1,9);
+
+CREATE TABLE SALES(ORDER_ID INT,ORDER_DATE DATE,PRODUCT_CODE VARCHAR(3),QTY_ORDERED INT,SALE_PRICE INT);
+ INSERT INTO SALES VALUES(1,'2022-01-10','P1',100,120000),(2,'2022-01-20','P1',50,60000),(3,'2022-02-05','P1',45,540000),(4,'2022-01-15','P2',50,13950),(5,'2022-03-25','P2',40,11160),(6,'2022-02-25','P3',10,50000),(7,'2022-03-15','P3',10,50000),(8,'2022-03-25','P3',20,100000),(9,'2022-04-21','P3',8,40000),(10,'2022-04-27','P4',9,5850);
+
+
+
+
+
+
+
+
+
+
+
