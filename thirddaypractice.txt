@@ -1,0 +1,95 @@
+create database thirdday;
+use thirdday;
+#non-parameterized
+Delimiter $
+create function Helloworld()
+returns varchar(60)
+deterministic
+begin
+return "Hello Abhishek";
+end$ 
+Delimiter ;
+
+select Helloworld();
+
+#parameterized
+Delimiter %
+create function multiply(onenum int ,twonum int)
+returns int
+deterministic
+begin
+return onenum*twonum;
+end%
+Delimiter ;
+
+select multiply(2,2);
+
+#Age 
+Delimiter ^
+create function Agecalculator(Dob date)
+returns int
+deterministic
+begin
+declare today_date date;
+select current_date() into today_date;
+return year(today_date)-year(Dob);
+end^
+Delimiter ;
+
+select Agecalculator('2000-11-16');
+
+Delimiter %
+create function fullname(firstname varchar(10) ,secondname varchar(10))
+returns varchar(20)
+deterministic
+begin
+return concat(firstname,secondname);
+end%
+Delimiter ;
+
+select fullname("Abhishek","N");
+
+use first;
+Delimiter %
+create procedure getcourseandemployee()
+begin
+select * from course;
+select * from employee;
+end%
+Delimiter ;
+
+call getcourseandemployee();
+
+Delimiter #
+create procedure getcoursename(in id int)
+begin
+select courseName from course where course.Tid=id;
+end#
+Delimiter ;
+
+call getcoursename(2);
+
+Delimiter $
+create procedure getcourserecord(out rec int)
+begin
+select count(*) into rec from course where course.Tid=2;
+end$
+Delimiter ;
+call getcourserecord(@rec);
+select @rec as 'total records';
+
+Delimiter $
+create procedure getcourserecordinandout(out rec int,in id int)
+begin
+select count(*) into rec from course where course.Tid=id;
+end$
+Delimiter ;
+call getcourserecordinandout(@rec,2);
+select @rec as 'total records';
+
+create view teachersview as select id+1 as id , Course from teacher;
+select * from teachersview;
+
+create view teachersview1  as select Course from teacher where Course="java";
+select * from teachersview1;
+ update teachersview1 set Course="React" ;
